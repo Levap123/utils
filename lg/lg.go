@@ -10,6 +10,7 @@ import (
 
 func init() {
 	logrus.SetFormatter(logrus.StandardLogger().Formatter)
+	logrus.SetReportCaller(true)
 }
 
 func NewLogger() (*logrus.Logger, error) {
