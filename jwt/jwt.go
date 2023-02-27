@@ -5,10 +5,17 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/spf13/viper"
 )
 
-var sign = []byte(viper.GetString("jwt_sign"))
+type JWT struct {
+	sign []byte
+}
+
+func NewJWT(sign string) *JWT {
+	return &JWT{
+		sign: []byte(sign),
+	}
+}
 
 type tokenClaims struct {
 	jwt.StandardClaims
@@ -16,7 +23,7 @@ type tokenClaims struct {
 	TokenType string `json:"token_type,omitempty"`
 }
 
-func GenerateJwt(UserID int, days int, TokenType string) (string, error) {
+func (j *JWT) GenerateJwt(UserID int, days int, TokenType string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &tokenClaims{
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(24 * time.Hour * time.Duration(days)).Unix(),
@@ -25,7 +32,7 @@ func GenerateJwt(UserID int, days int, TokenType string) (string, error) {
 		TokenType,
 	})
 
-	tokenString, err := token.SignedString(sign)
+	tokenString, err := token.SignedString(j.sign)
 	if err != nil {
 		return "", err
 	}
@@ -33,12 +40,12 @@ func GenerateJwt(UserID int, days int, TokenType string) (string, error) {
 	return tokenString, nil
 }
 
-func ParseToken(tokenString string) (*tokenClaims, error) {
+func (j *JWT) ParseToken(tokenString string) (*tokenClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &tokenClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("invalid sign method")
 		}
-		return sign, nil
+		return j.sign, nil
 	})
 	if err != nil {
 		return nil, err
