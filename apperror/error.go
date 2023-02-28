@@ -30,6 +30,6 @@ func MakeNotFoundErr(err error, clientMsg string) *AppError {
 	return NewError(err, clientMsg, http.StatusNotFound)
 }
 
-func MakeUnoauthorizedErr(err error, clientMsg string) *AppError {
-	return NewError(err, clientMsg, http.StatusUnauthorized)
+func MakeUnoauthorizedErr(err error) *AppError {
+	return NewError(err, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 }
