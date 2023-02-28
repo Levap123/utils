@@ -29,3 +29,7 @@ func MakeBadRequestErr(err error, clientMsg string) *AppError {
 func MakeNotFoundErr(err error, clientMsg string) *AppError {
 	return NewError(err, clientMsg, http.StatusNotFound)
 }
+
+func MakeUnoauthorizedErr(err error, clientMsg string) *AppError {
+	return NewError(err, clientMsg, http.StatusUnauthorized)
+}
