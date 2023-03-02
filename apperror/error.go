@@ -3,18 +3,16 @@ package apperror
 import "net/http"
 
 type AppError struct {
-	Err              error  `json:"err,omitempty"`
-	ClientMessage    string `json:"client_message,omitempty"`
-	DeveloperMessage string `json:"developer_message,omitempty"`
-	Status           int    `json:"status,omitempty"`
+	Err           error  `json:"err,omitempty"`
+	ClientMessage string `json:"client_message,omitempty"`
+	Status        int    `json:"status,omitempty"`
 }
 
 func NewError(err error, clientMsg string, status int) *AppError {
 	return &AppError{
-		Err:              err,
-		ClientMessage:    clientMsg,
-		DeveloperMessage: err.Error(),
-		Status:           status,
+		Err:           err,
+		ClientMessage: clientMsg,
+		Status:        status,
 	}
 }
 
