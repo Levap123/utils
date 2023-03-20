@@ -14,7 +14,7 @@ func init() {
 }
 
 func NewLogger() (*logrus.Logger, error) {
-	f, err := os.OpenFile("logs.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	f, err := os.OpenFile("logs.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0o644)
 	if err != nil {
 		return nil, err
 	}
@@ -28,5 +28,6 @@ func NewLogger() (*logrus.Logger, error) {
 			ForceFormatting: true,
 		},
 	}
+	logger.SetReportCaller(true)
 	return logger, nil
 }
